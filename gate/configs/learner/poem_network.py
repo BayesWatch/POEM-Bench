@@ -12,11 +12,11 @@ from gate.configs.learner.optimizer_config import (
     AdamOptimizerConfig,
     BaseOptimizerConfig,
 )
-from gate.learners.gcm import ConditionalGenerativeContrastiveModelling
-from gate.learners.protonet_gcm_architecture import PrototypicalNetworkGCMHead
-from gate.learners.matchingnet_gcm_architecture import MatchingNetworkGCMHead
+from gate.learners.poem import PartialObservationExpertsModelling
+from gate.learners.protonet_poem_architecture import PrototypicalNetworkPOEMHead
+from gate.learners.matchingnet_poem_architecture import MatchingNetworkPOEMHead
 
-from gate.model_blocks.auto_builder_modules.gcm_blocks import (
+from gate.model_blocks.auto_builder_modules.poem_blocks import (
     HeadConv,
     HeadMLP,
     HeadResNetBlock,
@@ -56,8 +56,8 @@ class HeadResNetBlockConfig(HeadConfig):
 
 
 @dataclass
-class ConditionalGenerativeContrastiveModellingConfig(LearnerConfig):
-    _target_: str = get_module_import_path(ConditionalGenerativeContrastiveModelling)
+class PartialObservationExpertsModellingConfig(LearnerConfig):
+    _target_: str = get_module_import_path(PartialObservationExpertsModelling)
     fine_tune_all_layers: bool = True
     use_input_instance_norm: bool = True
     use_mean_head: bool = True
@@ -72,32 +72,32 @@ class ConditionalGenerativeContrastiveModellingConfig(LearnerConfig):
 
 
 @dataclass
-class ConditionalGenerativeContrastiveModellingMLPHeadConfig(
-    ConditionalGenerativeContrastiveModellingConfig
+class PartialObservationExpertsModellingMLPHeadConfig(
+    PartialObservationExpertsModellingConfig
 ):
     mean_head_config: HeadConfig = HeadMLPConfig()
     precision_head_config: HeadConfig = HeadMLPConfig()
 
 
 @dataclass
-class ConditionalGenerativeContrastiveModellingConvHeadConfig(
-    ConditionalGenerativeContrastiveModellingConfig
+class PartialObservationExpertsModellingConvHeadConfig(
+    PartialObservationExpertsModellingConfig
 ):
     mean_head_config: HeadConfig = HeadConvConfig()
     precision_head_config: HeadConfig = HeadConvConfig()
 
 
 @dataclass
-class ConditionalGenerativeContrastiveModellingResNetHeadConfig(
-    ConditionalGenerativeContrastiveModellingConfig
+class PartialObservationExpertsModellingResNetHeadConfig(
+    PartialObservationExpertsModellingConfig
 ):
     mean_head_config: HeadConfig = HeadResNetBlockConfig()
     precision_head_config: HeadConfig = HeadResNetBlockConfig()
 
 
 @dataclass
-class PrototypicalNetworkGCMHeadConfig(LearnerConfig):
-    _target_: str = get_module_import_path(PrototypicalNetworkGCMHead)
+class PrototypicalNetworkPOEMHeadConfig(LearnerConfig):
+    _target_: str = get_module_import_path(PrototypicalNetworkPOEMHead)
     fine_tune_all_layers: bool = True
     use_input_instance_norm: bool = True
     use_mean_head: bool = True
@@ -112,8 +112,8 @@ class PrototypicalNetworkGCMHeadConfig(LearnerConfig):
 
 
 @dataclass
-class MatchingNetworkGCMHeadConfig(LearnerConfig):
-    _target_: str = get_module_import_path(MatchingNetworkGCMHead)
+class MatchingNetworkPOEMHeadConfig(LearnerConfig):
+    _target_: str = get_module_import_path(MatchingNetworkPOEMHead)
     fine_tune_all_layers: bool = True
     use_input_instance_norm: bool = True
     use_mean_head: bool = True

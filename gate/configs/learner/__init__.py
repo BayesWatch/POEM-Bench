@@ -4,13 +4,13 @@ from .episodic_linear_layer_fine_tuning import (
     EpisodicFullModelFineTuningSchemeConfig,
     EpisodicSingleLinearLayerFineTuningSchemeConfig,
 )
-from .gcm_network import (
-    ConditionalGenerativeContrastiveModellingConfig,
-    ConditionalGenerativeContrastiveModellingConvHeadConfig,
-    ConditionalGenerativeContrastiveModellingMLPHeadConfig,
-    ConditionalGenerativeContrastiveModellingResNetHeadConfig,
-    PrototypicalNetworkGCMHeadConfig,
-    MatchingNetworkGCMHeadConfig,
+from .poem_network import (
+    PartialObservationExpertsModellingConfig,
+    PartialObservationExpertsModellingConvHeadConfig,
+    PartialObservationExpertsModellingMLPHeadConfig,
+    PartialObservationExpertsModellingResNetHeadConfig,
+    PrototypicalNetworkPOEMHeadConfig,
+    MatchingNetworkPOEMHeadConfig,
 )
 from .learning_rate_scheduler_config import (
     CosineAnnealingLRConfig,
@@ -131,38 +131,38 @@ def add_learner_configs(config_store: ConfigStore):
 
     config_store.store(
         group=LEARNER_CONFIGS,
-        name="ConditionalGenerativeContrastiveModelling",
-        node=ConditionalGenerativeContrastiveModellingConfig,
+        name="PartialObservationExpertsModelling",
+        node=PartialObservationExpertsModellingConfig,
     )
 
     config_store.store(
         group=LEARNER_CONFIGS,
-        name="ConditionalGenerativeContrastiveMLPHeadModelling",
-        node=ConditionalGenerativeContrastiveModellingMLPHeadConfig,
+        name="PartialObservationExpertsMLPHeadModelling",
+        node=PartialObservationExpertsModellingMLPHeadConfig,
     )
 
     config_store.store(
         group=LEARNER_CONFIGS,
-        name="ConditionalGenerativeContrastiveConvHeadModelling",
-        node=ConditionalGenerativeContrastiveModellingConvHeadConfig,
+        name="PartialObservationExpertsConvHeadModelling",
+        node=PartialObservationExpertsModellingConvHeadConfig,
     )
 
     config_store.store(
         group=LEARNER_CONFIGS,
-        name="ConditionalGenerativeContrastiveResNetHeadModelling",
-        node=ConditionalGenerativeContrastiveModellingResNetHeadConfig,
+        name="PartialObservationExpertsResNetHeadModelling",
+        node=PartialObservationExpertsModellingResNetHeadConfig,
     )
 
     config_store.store(
         group=LEARNER_CONFIGS,
-        name="PrototypicalNetworkGCMHead",
-        node=PrototypicalNetworkGCMHeadConfig,
+        name="PrototypicalNetworkPOEMHead",
+        node=PrototypicalNetworkPOEMHeadConfig,
     )
 
     config_store.store(
         group=LEARNER_CONFIGS,
-        name="MatchingNetworkGCMHead",
-        node=MatchingNetworkGCMHeadConfig,
+        name="MatchingNetworkPOEMHead",
+        node=MatchingNetworkPOEMHeadConfig,
     )
 
     return config_store

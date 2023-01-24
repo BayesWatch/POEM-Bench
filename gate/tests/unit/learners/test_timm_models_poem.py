@@ -9,7 +9,7 @@ from gate.configs.learner import (
     PrototypicalNetworkEpisodicConfig,
 )
 from gate.configs.task.image_classification import ImageClassificationTaskConfig
-from gate.learners.gcm import ConditionalGenerativeContrastiveModelling
+from gate.learners.poem import PartialObservationExpertsModelling
 from gate.learners.protonet import PrototypicalNetworkEpisodicTuningScheme
 from gate.models.timm_hub import TimmImageModel
 
@@ -19,7 +19,7 @@ log = get_logger(__name__, set_default_handler=True)
 @pytest.mark.parametrize(
     "learner",
     [
-        ConditionalGenerativeContrastiveModelling,
+        PartialObservationExpertsModelling,
     ],
 )
 @pytest.mark.parametrize(

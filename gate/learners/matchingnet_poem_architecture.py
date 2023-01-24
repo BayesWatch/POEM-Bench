@@ -7,7 +7,7 @@ from dotted_dict import DottedDict
 import gate.base.utils.loggers as loggers
 from gate.configs.datamodule.base import ShapeConfig
 from gate.configs.task.image_classification import TaskConfig
-from gate.learners.protonet_gcm_architecture import PrototypicalNetworkGCMHead
+from gate.learners.protonet_poem_architecture import PrototypicalNetworkPOEMHead
 from gate.learners.utils import (
     get_cosine_distances,
     matching_logits,
@@ -18,7 +18,7 @@ from gate.learners.utils import (
 log = loggers.get_logger(__name__)
 
 
-class MatchingNetworkGCMHead(PrototypicalNetworkGCMHead):
+class MatchingNetworkPOEMHead(PrototypicalNetworkPOEMHead):
     def __init__(
         self,
         optimizer_config: Dict[str, Any],
@@ -33,7 +33,7 @@ class MatchingNetworkGCMHead(PrototypicalNetworkGCMHead):
         mean_head_config: Dict[str, Any] = None,
         precision_head_config: Dict[str, Any] = None,
     ):
-        super(MatchingNetworkGCMHead, self).__init__(
+        super(MatchingNetworkPOEMHead, self).__init__(
             optimizer_config,
             lr_scheduler_config,
             fine_tune_all_layers,

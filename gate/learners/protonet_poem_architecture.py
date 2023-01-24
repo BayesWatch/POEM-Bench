@@ -18,7 +18,7 @@ def precision_activation_function(x):
     return torch.exp(100 * torch.tanh(x / 100))
 
 
-class PrototypicalNetworkGCMHead(PrototypicalNetworkEpisodicTuningScheme):
+class PrototypicalNetworkPOEMHead(PrototypicalNetworkEpisodicTuningScheme):
     def __init__(
         self,
         optimizer_config: Dict[str, Any],
@@ -33,7 +33,7 @@ class PrototypicalNetworkGCMHead(PrototypicalNetworkEpisodicTuningScheme):
         mean_head_config: Dict[str, Any] = None,
         precision_head_config: Dict[str, Any] = None,
     ):
-        super(PrototypicalNetworkGCMHead, self).__init__(
+        super(PrototypicalNetworkPOEMHead, self).__init__(
             optimizer_config,
             lr_scheduler_config,
             fine_tune_all_layers,
@@ -55,7 +55,7 @@ class PrototypicalNetworkGCMHead(PrototypicalNetworkEpisodicTuningScheme):
         input_shape_dict: Union[ShapeConfig, Dict, DottedDict],
         output_shape_dict: Union[ShapeConfig, Dict, DottedDict],
     ):
-        super(PrototypicalNetworkGCMHead, self).build(
+        super(PrototypicalNetworkPOEMHead, self).build(
             model,
             task_config,
             modality_config,
@@ -69,7 +69,7 @@ class PrototypicalNetworkGCMHead(PrototypicalNetworkEpisodicTuningScheme):
             )
         }  # this should be b, f; or b, c, h, w
 
-        dummy_out = super(PrototypicalNetworkGCMHead, self).forward(dummy_x)
+        dummy_out = super(PrototypicalNetworkPOEMHead, self).forward(dummy_x)
         dummy_image_out = dummy_out["image"]
         dummy_features = {
             "image": dummy_image_out,
@@ -123,14 +123,14 @@ class PrototypicalNetworkGCMHead(PrototypicalNetworkEpisodicTuningScheme):
             )
 
         log.info(
-            f"Built GCM learner with input_shape {self.input_shape_dict} and "
+            f"Built POEM learner with input_shape {self.input_shape_dict} and "
             f"mean output shape {out_mean.shape} "
             f"and precision output shape {out_precision.shape} 👍"
         )
 
     def forward(self, input_dict: Dict[str, torch.Tensor]) -> Dict[str, torch.Tensor]:
 
-        out = super(PrototypicalNetworkGCMHead, self).forward(input_dict)
+        out = super(PrototypicalNetworkPOEMHead, self).forward(input_dict)
         out_flattened = F.adaptive_avg_pool2d(out["image"], 1).view(
             out["image"].shape[0], -1
         )

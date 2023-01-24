@@ -156,7 +156,7 @@ class PrototypicalNetworkEpisodicTuningScheme(LearnerModule):
                     modality_name
                 ]
 
-                # Keep features non-flattened for now for downstream use in GCM
+                # Keep features non-flattened for now for downstream use in POEM
                 output_dict[modality_name] = model_features  # _flatten
 
         return output_dict

@@ -26,9 +26,7 @@ def precision_activation_function(x):
     return torch.exp(100 * torch.tanh(x / 100))
 
 
-class ConditionalGenerativeContrastiveModelling(
-    PrototypicalNetworkEpisodicTuningScheme
-):
+class PartialObservationExpertsModelling(PrototypicalNetworkEpisodicTuningScheme):
     def __init__(
         self,
         optimizer_config: Dict[str, Any],
@@ -43,7 +41,7 @@ class ConditionalGenerativeContrastiveModelling(
         mean_head_config: Dict[str, Any] = None,
         precision_head_config: Dict[str, Any] = None,
     ):
-        super(ConditionalGenerativeContrastiveModelling, self).__init__(
+        super(PartialObservationExpertsModelling, self).__init__(
             optimizer_config,
             lr_scheduler_config,
             fine_tune_all_layers,
@@ -65,7 +63,7 @@ class ConditionalGenerativeContrastiveModelling(
         input_shape_dict: Union[ShapeConfig, Dict, DottedDict],
         output_shape_dict: Union[ShapeConfig, Dict, DottedDict],
     ):
-        super(ConditionalGenerativeContrastiveModelling, self).build(
+        super(PartialObservationExpertsModelling, self).build(
             model,
             task_config,
             modality_config,
@@ -79,9 +77,7 @@ class ConditionalGenerativeContrastiveModelling(
             )
         }  # this should be b, f; or b, c, h, w
 
-        dummy_out = super(ConditionalGenerativeContrastiveModelling, self).forward(
-            dummy_x
-        )
+        dummy_out = super(PartialObservationExpertsModelling, self).forward(dummy_x)
         dummy_image_out = dummy_out["image"]
         dummy_features = {
             "image": dummy_image_out,
@@ -135,14 +131,14 @@ class ConditionalGenerativeContrastiveModelling(
             )
 
         log.info(
-            f"Built GCM learner with input_shape {self.input_shape_dict} and "
+            f"Built POEM learner with input_shape {self.input_shape_dict} and "
             f"mean output shape {out_mean.shape} "
             f"and precision output shape {out_precision.shape} 👍"
         )
 
     def forward(self, input_dict: Dict[str, torch.Tensor]) -> Dict[str, torch.Tensor]:
 
-        out = super(ConditionalGenerativeContrastiveModelling, self).forward(input_dict)
+        out = super(PartialObservationExpertsModelling, self).forward(input_dict)
         out_flattened = F.adaptive_avg_pool2d(out["image"], 1).view(
             out["image"].shape[0], -1
         )
@@ -263,22 +259,6 @@ class ConditionalGenerativeContrastiveModelling(
             num_tasks, num_query_examples, -1
         )
 
-        # if phase_name == "validation" and not os.path.isfile("./test0.png"):
-        #     save_image(support_set_inputs["image"][0, :, :, :], "./support_test0.png")
-        #     save_image(support_set_inputs["image"][1, :, :, :], "./support_test1.png")
-        #     save_image(support_set_inputs["image"][2, :, :, :], "./support_test2.png")
-        #     save_image(support_set_inputs["image"][3, :, :, :], "./support_test3.png")
-        #     print('support')
-        #     print(support_set_inputs["view_information"][0:4,:])
-        #     save_image(query_set_inputs["image"][0, :, :, :], "./query_test0.png")
-        #     save_image(query_set_inputs["image"][1, :, :, :], "./query_test1.png")
-        #     save_image(query_set_inputs["image"][2, :, :, :], "./query_test2.png")
-        #     save_image(query_set_inputs["image"][3, :, :, :], "./query_test3.png")
-        #     print('query')
-        #     print(query_set_inputs["view_information"][0:4,:])
-        #     print("Waiting...")
-        #     time.sleep(10)
-
         (
             proto_mean,
             proto_precision,
@@ -301,16 +281,6 @@ class ConditionalGenerativeContrastiveModelling(
             proto_precision,
         )
 
-        # unique_targets, counts = support_set_targets.unique(
-        #     sorted=True, return_counts=True
-        # )
-
-        # views = counts.unsqueeze(0).unsqueeze(-1)
-        # log_proto_query_product_normalisation = (
-        #     log_proto_query_product_normalisation - 0.5 * torch.log(views / (views + 1))
-        # )
-
-        # NOTE: Could try exponentiating log normalisation here
         computed_task_metrics_dict[f"{phase_name}/loss"] = F.cross_entropy(
             log_proto_query_product_normalisation, query_set_targets
         )

@@ -9,7 +9,7 @@ from omegaconf import DictConfig
 
 from gate.base.utils.loggers import get_logger
 from gate.configs.datamodule.base import ShapeConfig
-from gate.model_blocks.auto_builder_modules.gcm_blocks import HeadResNetBlock
+from gate.model_blocks.auto_builder_modules.poem_blocks import HeadResNetBlock
 from gate.models.base import ModelModule
 
 log = get_logger()
